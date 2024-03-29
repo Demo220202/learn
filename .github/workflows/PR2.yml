@@ -1,0 +1,38 @@
+name: Merge Tag to Backup Branch
+
+on:
+  workflow_dispatch:  # Allows manual triggering of the workflow
+
+jobs:
+  merge_tag:
+    name: Merge Tag to Backup Branch
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Create Temporary Branch
+      run: git checkout -b temporary_branch ${{ github.event.inputs.tag }}
+
+    - name: Merge Temporary Branch to Backup Branch
+      run: |
+        git checkout backup_branch
+        git merge --no-ff --no-edit temporary_branch
+
+    - name: Push Changes to Backup Branch
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create Tag on Backup Branch
+      run: git tag b-${{ github.event.inputs.tag }} backup_branch
+
+    - name: Push Tag to GitHub
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        tags: b-${{ github.event.inputs.tag }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Delete Temporary Branch
+      run: git branch -d temporary_branch
