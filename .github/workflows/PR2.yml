@@ -2,6 +2,10 @@ name: Merge Tag to Backup Branch
 
 on:
   workflow_dispatch:  # Allows manual triggering of the workflow
+    inputs:
+      tag:
+        description: 'Tag to merge to backup branch (e.g., v1.0.0)'
+        required: true
 
 jobs:
   merge_tag:
