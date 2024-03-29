@@ -17,7 +17,7 @@ jobs:
 
     - name: Merge Temporary Branch to Backup Branch
       run: |
-        git checkout backup_branch
+        git checkout back_up
         git merge --no-ff --no-edit temporary_branch
 
     - name: Push Changes to Backup Branch
@@ -26,7 +26,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create Tag on Backup Branch
-      run: git tag b-${{ github.event.inputs.tag }} backup_branch
+      run: git tag b-${{ github.event.inputs.tag }} back_up
 
     - name: Push Tag to GitHub
       uses: ad-m/github-push-action@v0.6.0
