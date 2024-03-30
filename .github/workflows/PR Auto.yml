@@ -1,0 +1,39 @@
+name: Pull Request Automation
+ 
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+ 
+jobs:
+  process_pull_request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: main
+      - name: Fetch main branch
+        run: git fetch origin main
+ 
+      - name: Check if from QA to Main
+        if: ${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'qa' }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "${{ github.event.pull_request.title }}" -m "${{ github.event.pull_request.body }}"
+          git push origin "${{ github.event.pull_request.title }}"
+
+      - name: Check if from hotfix to Main
+        if: ${{ github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'hotfix' }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git tag -a "${{ github.event.pull_request.title }}" -m "${{ github.event.pull_request.body }}"
+          git push origin "${{ github.event.pull_request.title }}"
+
+      - name: Check if from Dev to QA
+        if: ${{ github.event.pull_request.base.ref == 'qa' && github.event.pull_request.head.ref == 'dev' }}
+        run: |
+          echo "No action required for PR from Dev to Main"
