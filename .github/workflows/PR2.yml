@@ -24,7 +24,8 @@ jobs:
     - name: Merge Temporary Branch to Backup Branch
       run: |
         git checkout back_up
-        git merge --no-ff --no-edit temp
+        git merge temp
+        git push origin back_up
 
     - name: Push Changes to Backup Branch
       uses: ad-m/github-push-action@v0.6.0
