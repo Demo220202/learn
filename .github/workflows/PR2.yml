@@ -21,7 +21,7 @@ jobs:
         git pull origin ${{ github.event.inputs.tag }}
         get fetch --tags origin
         git checkout -b temporary_branch
-        git merge ${{ github.event.inputs.tag }}
+        git merge --no-ff --no-edit ${{ github.event.inputs.tag }}
 
     - name: Merge Temporary Branch to Backup Branch
       run: |
