@@ -18,15 +18,12 @@ jobs:
 
     - name: Create Temporary Branch
       run: | 
-        git checkout ${{ github.event.inputs.tag }}
-        git checkout -b temporary_branch
-        git merge -s ours back_up
-        git commit -m "updated back_up branch with ${{ github.event.inputs.tag }}"
+        git checkout -b temp ${{ github.event.inputs.tag }}
 
     - name: Merge Temporary Branch to Backup Branch
       run: |
         git checkout back_up
-        git merge --no-ff --no-edit temporary_branch
+        git merge --no-ff --no-edit temp
 
     - name: Push Changes to Backup Branch
       uses: ad-m/github-push-action@v0.6.0
@@ -43,4 +40,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Delete Temporary Branch
-      run: git branch -d temporary_branch
+      run: git branch -d temp
