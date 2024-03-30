@@ -18,10 +18,10 @@ jobs:
 
     - name: Create Temporary Branch
       run: | 
-        git pull origin ${{ github.event.inputs.tag }}
-        get fetch --tags origin
+        git checkout ${{ github.event.inputs.tag }}
         git checkout -b temporary_branch
-        git merge --no-ff --no-edit ${{ github.event.inputs.tag }}
+        git merge -s ours back_up
+        git commit -m "updated back_up branch with ${{ github.event.inputs.tag }}"
 
     - name: Merge Temporary Branch to Backup Branch
       run: |
