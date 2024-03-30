@@ -1,0 +1,26 @@
+name: Merge Tag into Branch
+
+on:
+  # Trigger the workflow when a new tag is created
+  workflow_dispatch :
+    inputs:
+        tag_name:
+          description: 'The name of the tag to merge'
+          required: true
+
+jobs:
+  merge_tag:
+    runs-on: ubuntu-latest
+
+    
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Merge tag into branch
+      run: |
+        git fetch --tags
+        git checkout back_up
+        git merge ${{ github.event.inputs.tag_name }}
+        git push origin back_up
