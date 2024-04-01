@@ -1,30 +1,30 @@
 name: Merge Tag into Branch
 
 on:
-  # Trigger the workflow when a new tag is created
   workflow_dispatch :
     inputs:
         tag_name:
-          description: 'The name of the tag to merge'
+          description: 'Provide the name of the tag to merge'
           required: true
 
 jobs:
-  merge_tag:
+  MergeTag:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up Git
+    - name: Set up Git first
       run: |
         git config --global user.email "actions@example.com"
         git config --global user.name "GitHub Actions"
     
 
-    - name: Checkout repository
+    - name: Checkout repository (in the current branch)
       uses: actions/checkout@v3
 
-    - name: Merge tag into branch
+    - name: Merge tag into branch (here, it is back_up branch)
       run: |
         git fetch --tags
         git checkout back_up
         git merge ${{ github.event.inputs.tag_name }}
+        git tag -a "b-${{ github.event.inputs.tag_name }}" -m "${{ github.event.pull_request.body }}"
         git push origin back_up
