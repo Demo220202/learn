@@ -28,3 +28,4 @@ jobs:
         git merge ${{ github.event.inputs.tag_name }}
         git tag -a "b-${{ github.event.inputs.tag_name }}" -m "${{ github.event.pull_request.body }}"
         git push origin back_up
+        git push origin "b-${{ github.event.inputs.tag_name }}"
